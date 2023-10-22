@@ -3,11 +3,16 @@ const myForm=document.querySelector('#my-form');
        const emailInput=document.querySelector('#email');
        const msg=document.querySelector('.msg');
        const userList=document.querySelector('#users');
-
+       
        myForm.addEventListener('submit', onSubmit);
        function onSubmit(e){
+       let myoj={
+       name:nameInput.value,
+       email:emailInput.value
+       };
+       let myobj=JSON.stringify(myoj);
         e.preventDefault();
-        localStorage.setItem(nameInput.value,emailInput.value);
+        localStorage.setItem('myoj',myobj);
        //console.log(`Name=${nameInput.value} email=${emailInput.value}`);
        //const li=document.createElement('li');
        //li.appendChild(document.createTextNode(`${nameInput.value} ${emailInput.value}`));
