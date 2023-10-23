@@ -20,9 +20,13 @@ const myForm=document.querySelector('#my-form');
        const li=document.createElement('li');
        const delbtn=document.createElement('button');
        delbtn.className='delete';
+       const editbtn=document.createElement('button');
+       editbtn.className='edit';
+       editbtn.appendChild(document.createTextNode('Edit'))
        delbtn.appendChild(document.createTextNode('Delete'));
        li.appendChild(document.createTextNode(`${nameInput.value} ${emailInput.value} ${phoneInput.value}`));
        li.appendChild(delbtn);
+       delbtn.insertAdjacentElement('afterend',editbtn);
        userList.appendChild(li);
        nameInput.value='';
        emailInput.value='';
@@ -30,9 +34,20 @@ const myForm=document.querySelector('#my-form');
        }
        function deletefn(e){
               var item=e.target.parentElement;
-              console.log(item.textContent);
+              let arr=e.target.parentElement.innerText.split(" ");
+              if(e.target.className=="edit"){
+                     e.preventDefault();
+                     nameInput.value=arr[0];
+                     emailInput.value=arr[1];
+                     phoneInput.value=arr[2];
+                     item.style.display='none';
+                     localStorage.clear();
+                     
+              }
+              else{
               item.style.display='none';
               localStorage.clear();
+              }
        }
        //  const ul=document.querySelector('.items');
        //  ul.firstElementChild.textContent='Hello';
