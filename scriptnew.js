@@ -4,8 +4,8 @@ const myForm=document.querySelector('#my-form');
        const phoneInput=document.querySelector('#phone');
        const msg=document.querySelector('.msg');
        const userList=document.querySelector('#users');
-       
        myForm.addEventListener('submit', onSubmit);
+       userList.addEventListener('click',deletefn);
        function onSubmit(e){
        let myoj={
        name:nameInput.value,
@@ -18,11 +18,21 @@ const myForm=document.querySelector('#my-form');
        
        //console.log(`Name=${nameInput.value} email=${emailInput.value}`);
        const li=document.createElement('li');
+       const delbtn=document.createElement('button');
+       delbtn.className='delete';
+       delbtn.appendChild(document.createTextNode('Delete'));
        li.appendChild(document.createTextNode(`${nameInput.value} ${emailInput.value} ${phoneInput.value}`));
+       li.appendChild(delbtn);
        userList.appendChild(li);
        nameInput.value='';
        emailInput.value='';
        phoneInput.value='';
+       }
+       function deletefn(e){
+              var item=e.target.parentElement;
+              console.log(item.textContent);
+              item.style.display='none';
+              localStorage.clear();
        }
        //  const ul=document.querySelector('.items');
        //  ul.firstElementChild.textContent='Hello';
