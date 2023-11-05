@@ -12,53 +12,60 @@ const myForm=document.querySelector('#my-form');
        email:emailInput.value,
        phone:phoneInput.value
        };
-       let myobj=JSON.stringify(myoj);
-        e.preventDefault();
-        localStorage.setItem(emailInput.value,myobj);
+       e.preventDefault();
+       axios.post('https://crudcrud.com/api/c7121bf0a8ba4b8987d787ab738b91c5/appointmentdata',myoj)
+       .then(res=> showonscreen(res.data))
+       .catch(err=>console.log(err));
+       nameInput.value="";
+       emailInput.value="";
+       phoneInput.value="";
+       }
+window.addEventListener("DOMContentLoaded",()=>{
+       axios.get("https://crudcrud.com/api/c7121bf0a8ba4b8987d787ab738b91c5/appointmentdata")
+       .then((res)=>{
+           for(var i=0;i<res.data.length;i++){
+               showonscreen(res.data[i]);
+           }
+       } )
+       .catch(err=>console.log(err));
+   })
+function showonscreen(obj){
+       let name=obj.name;
+       let email=obj.email;
+       let phone=obj.phone;
+       let userid=obj._id;
+      const childHTML=`<li id=${userid}>${name} ${email} ${phone} 
+      <button onclick=deletefn('${userid}')>Delete</button>
+      <button onclick=editfn('${userid}')>Edit</button></li>`;
+      userList.innerHTML=userList.innerHTML+childHTML;
+}
+function deletefn(userid){     
+            axios.delete(`https://crudcrud.com/api/c7121bf0a8ba4b8987d787ab738b91c5/appointmentdata/${userid}`)
+            .then((response)=>{
+              removeuserfromscreen(userid);
+            })
+            .catch(err=>console.log(err));     
+}
+function removeuserfromscreen(userid){
+       const childnodedelt=document.getElementById(userid);
+       if(childnodedelt){
+              userList.removeChild(childnodedelt);
+       }
+}
+function editfn(userid){
+       axios.get(`https://crudcrud.com/api/c7121bf0a8ba4b8987d787ab738b91c5/appointmentdata/${userid}`)
+       .then((res)=>{
+       nameInput.value=res.data.name
+       emailInput.value=res.data.email
+       phoneInput.value=res.data.phone
+       })
+       .catch(err=>console.log(err)); 
+       axios.delete(`https://crudcrud.com/api/c7121bf0a8ba4b8987d787ab738b91c5/appointmentdata/${userid}`)
+            .then((response)=>{
+              removeuserfromscreen(userid);
+            })
+            .catch(err=>console.log(err)); 
+       removeuserfromscreen(userid);
        
-       //console.log(`Name=${nameInput.value} email=${emailInput.value}`);
-       const li=document.createElement('li');
-       const delbtn=document.createElement('button');
-       delbtn.className='delete';
-       const editbtn=document.createElement('button');
-       editbtn.className='edit';
-       editbtn.appendChild(document.createTextNode('Edit'))
-       delbtn.appendChild(document.createTextNode('Delete'));
-       li.appendChild(document.createTextNode(`${nameInput.value} ${emailInput.value} ${phoneInput.value}`));
-       li.appendChild(delbtn);
-       delbtn.insertAdjacentElement('afterend',editbtn);
-       userList.appendChild(li);
-       nameInput.value='';
-       emailInput.value='';
-       phoneInput.value='';
-       }
-       function deletefn(e){
-              var item=e.target.parentElement;
-              let arr=e.target.parentElement.innerText.split(" ");
-              if(e.target.className=="edit"){
-                     e.preventDefault();
-                     nameInput.value=arr[0];
-                     emailInput.value=arr[1];
-                     phoneInput.value=arr[2];
-                     item.style.display='none';
-                     localStorage.clear();
-                     
-              }
-              else{
-              item.style.display='none';
-              localStorage.clear();
-              }
-       }
-       //  const ul=document.querySelector('.items');
-       //  ul.firstElementChild.textContent='Hello';
-       // ul.children[0].style.color='green';
-       // ul.children[1].style.color='yellow';
-       // const btn=document.querySelector('.btn');
-       // btn.addEventListener('mouseover',(e)=>{
-       // btn.style.background='green';
-        
-       // })
-       // btn.addEventListener('mouseout',(e)=>{
-       // btn.style.background='white';
-        
-       // })
+  
+}  
